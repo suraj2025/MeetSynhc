@@ -5,6 +5,7 @@ import { Dashboard } from "./components/Dashboard";
 import { AvailabilitySettings } from "./components/AvailabilitySettings";
 import { PublicBooking } from "./components/PublicBooking";
 import { MeetingModal, sampleMeeting } from "./components/MeetingModal";
+import { getCurrentUser } from "./api/auth";
 
 // MARKER-MAKE-KIT-INVOKED
 // MARKER-MAKE-KIT-DISCOVERY-READ
@@ -20,13 +21,36 @@ const mockUser = {
 export default function App() {
   const [page, setPage] = useState<Page>("landing");
   const [showModal, setShowModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{name: string; email: string} | null>(null);
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
 
-  // Simulate OAuth flow
-  function handleSignIn() {
-    setPage("oauth");
-    setTimeout(() => setPage("dashboard"), 2800);
+  if (token) {
+    localStorage.setItem("jwt_token", token);
+    window.history.replaceState({}, "", "/");
   }
 
+  const savedToken = localStorage.getItem("jwt_token");
+  if (!savedToken) {
+    setPage("landing");
+    return;
+  }
+
+  // Real user fetch karo
+  getCurrentUser().then((user) => {
+    if (user) {
+      setCurrentUser(user);
+      setPage("dashboard");
+    } else {
+      setPage("landing");
+    }
+  });
+}, []);
+  // Simulate OAuth flow
+  function handleSignIn() {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  }
   function handleNavigate(target: string) {
     if (target === "dashboard") setPage("dashboard");
     else if (target === "availability") setPage("availability");
@@ -49,13 +73,13 @@ export default function App() {
 
       {page === "oauth" && <OAuthLoading />}
 
-      {page === "dashboard" && (
-        <Dashboard
-          user={mockUser}
-          onNavigate={handleNavigate}
-          activePage="dashboard"
-        />
-      )}
+    {page === "dashboard" && currentUser && (
+  <Dashboard
+    user={currentUser}
+    onNavigate={handleNavigate}
+    activePage="dashboard"
+  />
+)}
 
       {page === "availability" && (
         <AvailabilitySettings
@@ -95,11 +119,10 @@ export default function App() {
             <button
               key={item.id}
               onClick={() => setPage(item.id as Page)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
-                page === item.id
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${page === item.id
                   ? "bg-[#4F46E5] text-white"
                   : "text-[#6B7280] hover:bg-[#F3F4F6]"
-              }`}
+                }`}
             >
               {item.label}
             </button>

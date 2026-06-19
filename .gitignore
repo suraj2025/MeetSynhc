@@ -1,0 +1,72 @@
+# ===========================
+# JAVA / SPRING BOOT
+# ===========================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# ===========================
+# SECRETS — NEVER COMMIT
+# ===========================
+application-local.yml
+application-local.properties
+application-secret.yml
+*.env
+.env
+.env.local
+.env.production
+.env.development
+
+# ===========================
+# IDE — IntelliJ
+# ===========================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# ===========================
+# IDE — VS Code
+# ===========================
+.vscode/
+!.vscode/extensions.json
+
+# ===========================
+# NODE / REACT FRONTEND
+# ===========================
+node_modules/
+dist/
+dist-ssr/
+*.local
+.cache/
+
+# ===========================
+# LOGS
+# ===========================
+*.log
+logs/
+spring.log
+
+# ===========================
+# OS FILES
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# DOCKER
+# ===========================
+docker-compose.override.yml
+
+# ===========================
+# MISC
+# ===========================
+*.tmp
+*.swp

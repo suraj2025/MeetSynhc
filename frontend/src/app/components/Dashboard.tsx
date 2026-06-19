@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Video,
   Users,
+  LogOut,
 } from "lucide-react";
 
 interface DashboardProps {
@@ -100,17 +101,27 @@ export function Dashboard({ user, onNavigate, activePage = "dashboard" }: Dashbo
         </nav>
 
         {/* User */}
-        <div className="p-3 border-t border-white/10">
-          <div className="flex items-center gap-3 px-2 py-2">
-            <Avatar name={user.name} src={user.avatar} size="sm" />
-            {!sidebarCollapsed && (
-              <div className="flex-1 min-w-0">
-                <p className="text-white text-sm font-medium truncate">{user.name}</p>
-                <p className="text-[#A5B4FC] text-xs truncate">{user.email}</p>
-              </div>
-            )}
-          </div>
-        </div>
+<div className="p-3 border-t border-white/10">
+  <div className="flex items-center gap-3 px-2 py-2">
+    <Avatar name={user.name} src={user.avatar} size="sm" />
+    {!sidebarCollapsed && (
+      <div className="flex-1 min-w-0">
+        <p className="text-white text-sm font-medium truncate">{user.name}</p>
+        <p className="text-[#A5B4FC] text-xs truncate">{user.email}</p>
+      </div>
+    )}
+  </div>
+  <button
+    onClick={() => {
+      localStorage.removeItem("jwt_token");
+      window.location.href = "/";
+    }}
+    className="w-full mt-1 px-3 py-1.5 rounded-lg text-xs font-medium text-[#A5B4FC] hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer flex items-center gap-2"
+  >
+    <LogOut className="w-3.5 h-3.5 shrink-0" />
+    {!sidebarCollapsed && <span>Sign out</span>}
+  </button>
+</div>
       </aside>
 
       {/* Main content */}
@@ -275,7 +286,7 @@ export function Dashboard({ user, onNavigate, activePage = "dashboard" }: Dashbo
                   <span className="text-xs text-[#4F46E5] font-medium flex-1 truncate">meetsync.app/u/{firstName.toLowerCase()}</span>
                   <button
                     className="text-xs text-[#6B7280] hover:text-[#4F46E5] font-medium shrink-0"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     Copy
                   </button>
